@@ -20,7 +20,9 @@
                 "--context",
                 "ide",
                 "--project",
-                "$(pwd)"
+                "$(pwd)",
+                "--open-web-dashboard",
+                "false"
             ],
             "enabled": true
         }
