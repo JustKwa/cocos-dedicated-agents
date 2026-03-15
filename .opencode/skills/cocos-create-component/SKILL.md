@@ -12,6 +12,8 @@ Cocos Creator uses an Entity-Component (EC) architecture where:
 - **Component** = Behavior/functionality attached to Node
 - **Scene** = Collection of Node hierarchies
 
+**IMPORTANT MUST READ:** Before creating any component must read [validating-node-component](../validating-node-component/SKILL.md) skill to understand how to validate node and component before using them.
+
 ```typescript
 import { _decorator, Component, Node } from 'cc';
 const { ccclass, property } = _decorator;
@@ -22,7 +24,7 @@ export class PlayerController extends Component {
     // @property decorator exposes fields to Inspector
     // NOTE: inspector property should be name `camelCase`
     @property(Node)
-    private targetNode: Node | null = null;
+    private targetNode: Node;
 
     // NOTE: Private fields should be name `m` prefix
     private mCurrentHealth: number = 100;
@@ -92,7 +94,7 @@ export class PropertyExamples extends Component {
 
     // ✅ EXCELLENT: Property with custom display name and tooltip
     @property({
-        type: Number,
+        type: CCFloat,
         displayName: 'Movement Speed',
         tooltip: 'Player movement speed in units per second',
         min: 0,
@@ -100,6 +102,14 @@ export class PropertyExamples extends Component {
         step: 10,
     })
     private speed: number = 100;
+
+    // ❌ WRONG: Adding unnecessary tooltips and details for obvious proerpty's name
+    @property({
+        type: Number,
+        displayName: 'Movement Speed',
+        tooltip: 'Player movement speed in units per second',
+    })
+    private playerMoveSpeed: number = 100;
 }
 
 // ❌ WRONG: Property without type
@@ -117,15 +127,25 @@ const { ccclass, property } = _decorator;
 
 @ccclass('GameManager')
 export class GameManager extends Component {
+    // ✅ EXCELLENT: Simple property declaration
     @property(Node)
     private playerNode: Node;
+
+    // ❌ WRONG: Adding unnecessary type declaration for inspector properties
+    @property(Node)
+    private testNode: Node | null = null;
 
     private mUITransform: UITransform;
 
     // ✅ EXCELLENT: onLoad for initialization and validation
     protected onLoad(): void {
-        // Validate required references
-        assert(this.playerNode, '[GameManager]: playerNode is null or not set');
+        // ✅ EXCELLENT: Validate required inspector references, should use !! to validate
+        // ✅ EXCELLENT: Embrace early assertions for required inspector properties
+        assert(!!this.playerNode, '[GameManager]: playerNode is null or not set');
+
+        // ❌ WRONG: Validate inspector fields only incase they are not set in the inspector, not cached references/private fields
+        assert(!!this.mUITransform, '[GameManager]: playerNode is null or not set');
+
 
         // Cache references
         this.mUITransform = this.node.getComponent(UITransform);
@@ -135,6 +155,13 @@ export class GameManager extends Component {
     }
 
     private onSizeChanged = () => { }
+
+    // ❌ WRONG: Unnecessary function abstraction, directly add event listener to `onLoad` instead of creating a new function and do seperate validation
+    private unnecessaryFunctionAbstraction(): void { 
+        if (this.mUITransform) {
+            this.mUITransform.on(UITransform.EventType.SIZE_CHANGED, this.onSizeChanged, this);
+        }
+    }
 }
 
 // ❌ WRONG: Heavy operations in onLoad
@@ -159,7 +186,7 @@ export class PlayerController extends Component {
     private enemyManager: EnemyManager;
 
     protected onLoad(): void {
-        assert(this.enemyManagerNode, '[PlayerController]: enemyManagerNode is null or not set');
+        assert(!!this.enemyManagerNode, '[PlayerController]: enemyManagerNode is null or not set');
         this.enemyManager = this.enemyManagerNode.getComponent(EnemyManager);
     }
 
@@ -307,17 +334,10 @@ protected lateUpdate(dt: number): void {
 
 ### 6. onDestroy() - Cleanup
 
+
 ```typescript
 import { _decorator, Component, Node, UITransform } from 'cc';
 const { ccclass, property } = _decorator;
-
-function isComponentAndNodeValid(component: Component): boolean {
-    return component !== null && component.isValid && isNodeValid(component.node);
-}
-
-function isNodeValid(node: Node): boolean {
-    return node !== null && node.isValid;
-}
 
 @ccclass('ResourceManager')
 export class ResourceManager extends Component {
@@ -329,7 +349,6 @@ export class ResourceManager extends Component {
 
     // ✅ EXCELLENT: Complete cleanup in onDestroy
     protected onDestroy(): void {
-        // Lookup and use functions (isComponentAndNodeValid or isNodeValid) that checks if component and node are valid, if doesn't exist ask user for permission to create said utility 
         if (isComponentAndNodeValid(this.mUITransform)) {
             this.mUITransform.off(UITransform.EventType.SIZE_CHANGED, this.onSizeChanged, this);
         }
@@ -375,12 +394,9 @@ protected onDestroy(): void {
 // Execution order when scene loads:
 // 1. All components: onLoad() (in hierarchy order)
 // 2. All components: start() (in hierarchy order)
-// 3. All components: onEnable() (if not already enabled)
 // 4. Begin frame loop:
 //    - All components: update(dt)
 //    - All components: lateUpdate(dt)
-// 5. When component disabled:
-//    - Component: onDisable()
 // 6. When component destroyed:
 //    - Component: onDestroy()
 
