@@ -8,6 +8,12 @@ This project contains pre-configured AI agent settings that help you work with C
 
 ## Setup
 
+### Prerequisites
+
+- [OpenCode CLI](https://opencode.ai) installed
+- Node.js and Bun (for running the agent system)
+- `uv` installed. [Installation Guide](https://docs.astral.sh/uv/getting-started/installation/)
+
 ### Quick Command (For Tech-Savvy Users)
 
 ```bash
@@ -31,11 +37,6 @@ cp -r ~/<path-to-cocos-dedicated-agents>/* ~/<path-to-your-project>/.opencode/
 - **explorer**: Helps navigate and understand codebase structure
 - **fixer**: Assists with debugging and fixing code issues
 - **oracle**: Offers strategic technical advice and architecture guidance
-
-## Requirements
-
-- [OpenCode CLI](https://opencode.ai) installed
-- Node.js and Bun (for running the agent system)
 
 ## Usage
 
