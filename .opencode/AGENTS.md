@@ -1,0 +1,1 @@
+- If you deploy the @explorer subagent, you must load the `serena_mcp_guidelines` skill and give that context to the @explorer agent.
