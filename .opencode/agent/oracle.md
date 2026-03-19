@@ -2,7 +2,7 @@
 description: Strategic technical advisor. Use for architecture decisions, complex debugging, code review, and engineering guidance.
 temperature: 0.1
 mode: subagent
-model: opencode-go/kimi-k2.5
+model: anthropic/claude-opus-4-6
 permissions:
     write: deny
     edit: deny
