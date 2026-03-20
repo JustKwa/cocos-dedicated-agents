@@ -2,7 +2,7 @@
 description: Use this agent when you need to read, analyze, or extract information from Cocos Creator 3.8.X documentation
 temperature: 0.1
 mode: subagent
-model: opencode-go/kimi-k2.5
+model: opencode-go/minimax-m2.7
 permissions:
     webfetch: allow
     context7: allow

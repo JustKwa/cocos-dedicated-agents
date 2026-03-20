@@ -2,7 +2,8 @@
 description: Fast implementation specialist. Receives complete context and task spec, executes code changes efficiently.
 temperature: 0.1
 mode: subagent
-model: anthropic/claude-haiku-4-5
+model: opencode-go/minimax-m2.7
+# model: anthropic/claude-haiku-4-5
 permissions:
     webfetch: deny
     context7: deny
