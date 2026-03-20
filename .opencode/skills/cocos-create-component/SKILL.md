@@ -1,6 +1,6 @@
 ---
 name: cocos-create-component
-description: Create a new component in Cocos Creator 3.8.X using Entity-Component (EC) System
+description: "[Cocos Creator 3.8.X only] Create a new component using the Entity-Component (EC) system. Use with cocos-director + @fixer for Cocos tasks—not for unrelated code."
 compatibility: opencode
 ---
 

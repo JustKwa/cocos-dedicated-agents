@@ -2,8 +2,8 @@
 description: Strategic technical advisor. Use for architecture decisions, complex debugging, code review, and engineering guidance.
 temperature: 0.1
 mode: subagent
-model: cursor/gemini-3-flash
-# model: opencode-go/glm-5
+# model: cursor/gemini-3-flash
+model: opencode-go/glm-5
 # model: anthropic/claude-opus-4-6
 permissions:
     write: deny
