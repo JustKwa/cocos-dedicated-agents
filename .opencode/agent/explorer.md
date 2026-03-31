@@ -2,7 +2,8 @@
 description: Fast codebase search and pattern matching. Use for finding files, locating code patterns, and answering 'where is X?' questions.
 temperature: 0.1
 mode: subagent
-model: opencode-go/minimax-m2.7
+# model: opencode-go/minimax-m2.7
+model: cursor/gemini-3-flash
 permissions:
     write: deny
     edit: deny
